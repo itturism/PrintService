@@ -6,6 +6,7 @@ namespace FastReport.Models
     {
         public List<TagParam> ReplaceParameters { get; set; }
         public byte[] DocumentTemplate { get; set; }
+        public string Name { get; set; }
     }
     public class TagParam
     {

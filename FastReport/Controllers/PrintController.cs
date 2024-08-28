@@ -30,7 +30,7 @@ namespace FastReport.Controllers
             var response = Request.CreateResponse(HttpStatusCode.OK);
             response.Content = new StreamContent(stream);
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-            response.Content.Headers.ContentDisposition.FileName = "document";
+            response.Content.Headers.ContentDisposition.FileName = request.Name;
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             return response;
         }
