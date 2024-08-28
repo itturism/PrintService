@@ -13,21 +13,22 @@ namespace FastReport.Controllers
     public class PrintController : ApiController
     {
         [HttpPost]
-        public HttpResponseMessage Post([FromBody] PrintModel request)
+        public HttpResponseMessage Post([FromBody] PrintModelRequest request)
         {
             var report = new WebReport();
+            var stream = new MemoryStream();
+            
             report.Report.Load(new MemoryStream(request.Template));
             foreach (var param in request.Parameters ?? new List<TagParam>())
             {
                 report.Report.SetParameterValue(param.Key, param.Value);
             }
             report.Report.Prepare();
-            var pdfStream = new MemoryStream();
-            report.Report.Export(new PDFExport(), pdfStream);
-            pdfStream.Seek(0, SeekOrigin.Begin);
+            report.Report.Export(new PDFExport(), stream);
+            stream.Seek(0, SeekOrigin.Begin);
 
-            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = new StreamContent(pdfStream);
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StreamContent(stream);
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
             response.Content.Headers.ContentDisposition.FileName = "document";
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");

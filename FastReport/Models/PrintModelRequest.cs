@@ -2,7 +2,7 @@
 
 namespace FastReport.Models
 {
-    public class PrintModel
+    public class PrintModelRequest
     {
         public List<TagParam> Parameters { get; set; }
         public byte[] Template { get; set; }
