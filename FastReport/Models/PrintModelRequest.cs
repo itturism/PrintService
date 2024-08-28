@@ -4,8 +4,8 @@ namespace FastReport.Models
 {
     public class PrintModelRequest
     {
-        public List<TagParam> Parameters { get; set; }
-        public byte[] Template { get; set; }
+        public List<TagParam> ReplaceParameters { get; set; }
+        public byte[] DocumentTemplate { get; set; }
     }
     public class TagParam
     {

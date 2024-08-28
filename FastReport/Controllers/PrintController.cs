@@ -18,8 +18,8 @@ namespace FastReport.Controllers
             var report = new WebReport();
             var stream = new MemoryStream();
             
-            report.Report.Load(new MemoryStream(request.Template));
-            foreach (var param in request.Parameters ?? new List<TagParam>())
+            report.Report.Load(new MemoryStream(request.DocumentTemplate));
+            foreach (var param in request.ReplaceParameters ?? new List<TagParam>())
             {
                 report.Report.SetParameterValue(param.Key, param.Value);
             }
