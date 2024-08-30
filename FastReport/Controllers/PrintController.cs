@@ -28,11 +28,12 @@ namespace FastReport.Controllers
                 }
                 foreach (var table in request.PrintDataSet ?? new List<PrintDataSet>())
                 {
-                    report.Report.RegisterData(Convert(table), table.RegisterName);
+                    report.Report.RegisterData(table.ConvertToDataSet(), table.RegisterName);
                 }
 
                 report.Report.Prepare();
                 report.Report.Export(new PDFExport(), stream);
+                report.Report.Clear();
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = Request.CreateResponse(HttpStatusCode.OK);
@@ -42,24 +43,6 @@ namespace FastReport.Controllers
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                 return response;
             }
-        }
-
-        private DataSet Convert(PrintDataSet data)
-        {
-            var result = new DataSet(data.Name);
-            foreach(var table in data.Tables)
-            {
-                result.Tables.Add(new DataTable(table.Name));
-                foreach (var column in table.Columns)
-                {
-                    result.Tables[table.Name].Columns.Add(column);
-                    foreach (var row in table.Rows)
-                    {
-                        result.Tables[table.Name].Rows.Add(row);
-                    }
-                }
-            }
-            return result;
         }
     }
 }

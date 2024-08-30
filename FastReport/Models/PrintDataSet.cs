@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace PrintService.Models
@@ -17,10 +18,28 @@ namespace PrintService.Models
         {
             get => GetValue(key);
         }
+        public DataSet ConvertToDataSet()
+        {
+            var result = new DataSet(Name);
+            foreach (var table in Tables)
+            {
+                result.Tables.Add(new DataTable(table.Name));
+                foreach (var column in table.Columns)
+                {
+                    result.Tables[table.Name].Columns.Add(column, typeof(string));
+                }
+                foreach (var row in table.Rows)
+                {
+                    result.Tables[table.Name].Rows.Add(row.ToArray());
+                }
+            }
+            return result;
+        }
         private PrintDataTable GetValue(string key)
         {
             return Tables.FirstOrDefault(e => e.Name == key);
         }
+
     }
 
     public class PrintDataTable
